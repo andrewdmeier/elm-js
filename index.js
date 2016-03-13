@@ -1,7 +1,7 @@
 var counter = require('./counter.js');
-var counterPair = require('./counter-pair.js');
-var listOf = require('./list-of.js');
+var counterPair = require('./counterPair.js');
+var listOf = require('./listOf.js');
 var textarea = require('./textarea.js');
-var start = require('./start-app.js').start;
+var start = require('./startApp.js').start;
 
 start(listOf(textarea));
