@@ -3,6 +3,7 @@
 // https://medium.com/javascript-inside/learn-the-concepts-part-1-418952d968cb#.ywybwoyne
 // https://medium.com/@chetcorcos/elmish-functional-programming-in-javascript-50995f1d4b9e#.dfw4k28ob
 // https://github.com/evancz/elm-architecture-tutorial
+// https://github.com/paldepind/functional-frontend-architecture
 
 var start = function(mvu, $root) {
     var model = mvu.init();

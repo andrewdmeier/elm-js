@@ -1,72 +1,68 @@
-var createAction = require('./actions.js').createAction;
-var forward = require('./actions.js').forward;
+var Type = require('union-type');
+
+var forward = require('lodash/flowRight');
+
 var div = require('./html.js').div;
 var button = require('./html.js').button;
 
-// Actions
-var ADD = 'add';
-var Add = createAction(ADD);
-
-// var REMOVE = 'remove';
-// var Remove = createAction.bind(null, REMOVE);
-
-var EDIT = 'edit';
-var edit = function(index) {
-    return function(data) {
-        return {
-            type: 'edit',
-            data: data,
-            index: index,
-        };
-    };
-};
-
-// Model
-var init = function(component) {
-    return {
-        list: [],
-        component: component,
-    };
-};
-
-// View
-var view = function(dispatch, model) {
-    return div({},
-            model.list.map(function(item, index) {
-                return div({},
-                    [ model.component.view(forward(dispatch, edit(index)), model.list[index]) ]
-                );
-            }).concat([
-                button({ onClick: dispatch(Add) }, [ '+' ])
-            ])
-        );
-};
-
-// Update
-var update = function(action, model) {
-    switch (action.type) {
-    case ADD:
-        return {
-            list: model.list.concat(model.component.init()),
-            component: model.component,
-        };
-    case EDIT:
-        return {
-            list: model.list.map(function(item, index) {
-                return index === action.index ?
-                    model.component.update(action.data, item) :
-                    item;
-            }),
-            component: model.component,
-        };
-    default: return model;
-    }
-};
-
 module.exports = function(component) {
+    // Actions
+    var Action = Type({
+        Add: [],
+        Edit: [ Number, component.Action ],
+    });
+
+    // Model
+    var init = function() {
+        return {
+            list: [],
+            nextId: 0,
+        };
+    };
+
+    // View
+    var view = function(dispatch, model) {
+        return div({},
+                model.list.map(function(item, index) {
+                    return div({},
+                        [ component.view(
+                            forward(dispatch, Action.Edit(model.list[index].id)),
+                            model.list[index].model)
+                        ]
+                    );
+                }).concat([
+                    button({ onClick: dispatch(Action.Add()) }, [ '+' ])
+                ])
+            );
+    };
+
+    // Update
+    var update = function(action, model) {
+        return Action.case({
+            Add: function() {
+                return {
+                    list: model.list.concat({ id: model.nextId, model: component.init() }),
+                    nextId: model.nextId + 1,
+                };
+            },
+            Edit: function(id, act) {
+                return {
+                    list: model.list.map(function(item) {
+                        return item.id === id ?
+                            { id: item.id, model: component.update(act, item.model) } :
+                            item;
+                    }),
+                    nextId: model.nextId,
+                };
+            },
+            _: function() { return model; },
+        }, action);
+    };
+
     return {
         init: init.bind(null, component),
         view: view,
         update: update,
+        Action: Action,
     };
 };

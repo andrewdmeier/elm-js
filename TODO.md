@@ -6,6 +6,4 @@ https://github.com/facebook/react
 
 - immutable library
 
-- better action api
-
 - flow annotations
