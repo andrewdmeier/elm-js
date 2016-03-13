@@ -2,7 +2,8 @@ var Type = require('union-type');
 
 var forward = require('lodash/flowRight');
 
-var div = require('./html.js').div;
+var h = require('virtual-dom/h');
+
 var counter = require('./counter.js');
 
 // Actions
@@ -21,7 +22,7 @@ var init = function() {
 
 // View
 var view = function(dispatch, model) {
-    return div({},
+    return h('div', {},
       [ counter.view(forward(dispatch, Action.Top), model.top),
         counter.view(forward(dispatch, Action.Bottom), model.bottom),
       ]
