@@ -1,20 +1,26 @@
 var Type = require('union-type');
+var compose = require('lodash/flow');
+
 var h = require('virtual-dom/h');
 
+var targetValue = require('./helpers.js').targetValue;
+
+
 // Actions
-var Action = Type({ Increment: [], Decrement: [] });
+var Action = Type({ Input: [ String ] });
 
 // Model
 var init = function() {
-    return 0;
+    return '';
 };
 
 // View
 var view = function(dispatch, model) {
     return h('div', {},
-        [ h('button', { onclick: dispatch(Action.Increment()) }, [ '+' ]),
-          h('span', {}, [ model ]),
-          h('button', { onclick: dispatch(Action.Decrement()) }, [ '-' ]),
+        [ h('textarea',
+            { oninput: compose(targetValue, function(s) { dispatch(Action.Input(s))(); }) },
+            [ model ]
+          ),
         ]
     );
 };
@@ -22,8 +28,7 @@ var view = function(dispatch, model) {
 // Update
 var update = function(action, model) {
     return Action.case({
-        Increment: function() { return model + 1; },
-        Decrement: function() { return model - 1; },
+        Input: function(input) { return input; },
         _: function() { return model; },
     }, action);
 };

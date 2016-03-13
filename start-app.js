@@ -5,16 +5,30 @@
 // https://github.com/evancz/elm-architecture-tutorial
 // https://github.com/paldepind/functional-frontend-architecture
 
-var start = function(mvu, $root) {
+var diff = require('virtual-dom/diff');
+var patch = require('virtual-dom/patch');
+var createElement = require('virtual-dom/create-element');
+
+var start = function(mvu) {
+    var rootNode;
+    var tree;
+
     var model = mvu.init();
     var dispatch = function dispatch(action) {
-        // NOTE: wrapped fn will eventually be called by event handlers.
         return function() {
+            var newTree;
+            var patches;
+
             model = mvu.update(action, model);
-            $root.html(mvu.view(dispatch, model));
+            newTree = mvu.view(dispatch, model);
+            patches = diff(tree, newTree);
+            rootNode = patch(rootNode, patches);
+            tree = newTree;
         };
     };
-    $root.html(mvu.view(dispatch, model));
+    tree = mvu.view(dispatch, model); // We need an initial tree
+    rootNode = createElement(tree); // Create an initial root DOM node ...
+    document.body.appendChild(rootNode); // ... and it should be in the document
 };
 
 module.exports = {

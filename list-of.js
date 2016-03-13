@@ -1,9 +1,8 @@
 var Type = require('union-type');
 
-var forward = require('lodash/flowRight');
+var h = require('virtual-dom/h');
 
-var div = require('./html.js').div;
-var button = require('./html.js').button;
+var forward = require('lodash/flowRight');
 
 module.exports = function(component) {
     // Actions
@@ -22,16 +21,16 @@ module.exports = function(component) {
 
     // View
     var view = function(dispatch, model) {
-        return div({},
+        return h('div', {},
                 model.list.map(function(item, index) {
-                    return div({},
+                    return h('div', {},
                         [ component.view(
                             forward(dispatch, Action.Edit(model.list[index].id)),
                             model.list[index].model)
                         ]
                     );
                 }).concat([
-                    button({ onClick: dispatch(Action.Add()) }, [ '+' ])
+                    h('button', { onclick: dispatch(Action.Add()) }, [ '+' ])
                 ])
             );
     };
