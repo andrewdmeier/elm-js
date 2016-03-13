@@ -1,0 +1,11 @@
+{
+    "preset": "google",
+    "validateIndentation": 4,
+
+
+
+
+
+    "disallowSpacesInsideArrayBrackets": false,
+    "disallowSpacesInsideObjectBrackets": false
+}

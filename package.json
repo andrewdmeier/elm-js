@@ -1,0 +1,29 @@
+{
+  "name": "elm-js",
+  "version": "1.0.0",
+  "description": "elm arch in js",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack ./index.js bundle.js",
+    "start": "npm run-script build; node server.js"
+  },
+  "keywords": [
+    "elm",
+    "js"
+  ],
+  "author": "john-kelly",
+  "license": "ISC",
+  "dependencies": {
+    "jquery": "^2.2.1",
+    "lodash": "^4.6.1"
+  },
+  "devDependencies": {
+    "babel-eslint": "^5.0.0",
+    "eslint": "^2.4.0",
+    "eslint-config-airbnb": "^6.1.0",
+    "eslint-plugin-react": "^4.2.1",
+    "express": "^4.13.4",
+    "webpack": "^1.12.14"
+  }
+}
