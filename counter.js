@@ -1,5 +1,3 @@
-/* @flow */
-
 var createAction = require('./actions.js').createAction;
 var div = require('./html.js').div;
 var button = require('./html.js').button;
