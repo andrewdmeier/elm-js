@@ -20,8 +20,8 @@ var init = function() {
 // View
 var view = function(dispatch, model) {
     return div({},
-      [ counter.view(forward(dispatch, Top), model.top)
-      , counter.view(forward(dispatch, Bottom), model.bottom)
+      [ counter.view(forward(dispatch, Top), model.top),
+        counter.view(forward(dispatch, Bottom), model.bottom),
       ]
     );
 };
@@ -29,15 +29,18 @@ var view = function(dispatch, model) {
 // Update
 var update = function(action, model) {
     switch (action.type) {
-
-        // NOTE: may want to use a way w/o assignment.
-        case TOP:
-            model.top = counter.update(action.data, model.top);
-            return model;
-        case BOTTOM:
-            model.bottom = counter.update(action.data, model.bottom);
-            return model;
-        default: return model;
+    case TOP:
+        return {
+            top: counter.update(action.data, model.top),
+            bottom: model.bottom,
+        };
+    case BOTTOM:
+        return {
+            top: model.top,
+            bottom: counter.update(action.data, model.bottom),
+        };
+    default:
+        return model;
     }
 };
 

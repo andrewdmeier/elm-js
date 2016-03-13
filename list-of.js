@@ -7,8 +7,8 @@ var button = require('./html.js').button;
 var ADD = 'add';
 var Add = createAction(ADD);
 
-var REMOVE = 'remove';
-var Remove = createAction.bind(null, REMOVE);
+// var REMOVE = 'remove';
+// var Remove = createAction.bind(null, REMOVE);
 
 var EDIT = 'edit';
 var edit = function(index) {
@@ -34,32 +34,32 @@ var view = function(dispatch, model) {
     return div({},
             model.list.map(function(item, index) {
                 return div({},
-                    [ model.component
-                        .view(forward(dispatch, edit(index)), model.list[index])
-                    ]
+                    [ model.component.view(forward(dispatch, edit(index)), model.list[index]) ]
                 );
             }).concat([
-                button({ onClick: dispatch(Add) }, ['+'])
+                button({ onClick: dispatch(Add) }, [ '+' ])
             ])
         );
 };
 
 // Update
 var update = function(action, model) {
-    // TODO: refactor w/o assignment
     switch (action.type) {
-        case ADD:
-            model.list.push(model.component.init());
-            return model;
-        case EDIT:
-            model.list = model.list.map(
-                function(item, index) {
-                    return index === action.index ?
-                        model.component.update(action.data, item) :
-                        item;
-                });
-            return model;
-        default: return model;
+    case ADD:
+        return {
+            list: model.list.concat(model.component.init()),
+            component: model.component,
+        };
+    case EDIT:
+        return {
+            list: model.list.map(function(item, index) {
+                return index === action.index ?
+                    model.component.update(action.data, item) :
+                    item;
+            }),
+            component: model.component,
+        };
+    default: return model;
     }
 };
 

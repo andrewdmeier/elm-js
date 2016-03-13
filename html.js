@@ -4,9 +4,10 @@ var createElement = function(tag, attrs, children) {
     var $elem = $('<' + tag + '>');
 
     Object.keys(attrs).forEach(function(key) {
+        var event;
         var val = attrs[key];
         if (key.indexOf('on') === 0) {
-            var event = key.substr(2).toLowerCase();
+            event = key.substr(2).toLowerCase();
             $elem.on(event, val);
         } else {
             $elem.attr(key, val);

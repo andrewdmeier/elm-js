@@ -1,4 +1,4 @@
-'use strict';
+/* @flow */
 
 var createAction = require('./actions.js').createAction;
 var div = require('./html.js').div;
@@ -19,9 +19,9 @@ var init = function() {
 // View
 var view = function(dispatch, model) {
     return div({},
-        [ button({ onClick: dispatch(Increment) }, ['+'])
-        , span({}, [model])
-        , button({ onClick: dispatch(Decrement) }, ['-'])
+        [ button({ onClick: dispatch(Increment) }, [ '+' ]),
+          span({}, [ model ]),
+          button({ onClick: dispatch(Decrement) }, [ '-' ]),
         ]
     );
 };
@@ -29,9 +29,12 @@ var view = function(dispatch, model) {
 // Update
 var update = function(action, model) {
     switch (action.type) {
-        case INCREMENT: return model + 1;
-        case DECREMENT: return model - 1;
-        default: return model;
+    case INCREMENT:
+        return model + 1;
+    case DECREMENT:
+        return model - 1;
+    default:
+        return model;
     }
 };
 

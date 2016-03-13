@@ -1,0 +1,22 @@
+{
+  "extends": "airbnb/legacy",
+  "parser": "babel-eslint",
+
+  "plugins": [
+    "flow-vars"
+  ],
+
+  "rules": {
+    // overwrite extends config
+    "indent": [2, 4],
+    "array-bracket-spacing": [2, "always"],
+    "comma-style": [2, "last"],
+    "comma-dangle": [2, "only-multiline"],
+    "func-names": 0,
+    "space-before-function-paren": [2, "never"],
+
+    // plugins
+    "flow-vars/define-flow-type": 1,
+    "flow-vars/use-flow-type": 1
+  }
+}
