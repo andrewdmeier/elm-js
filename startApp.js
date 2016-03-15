@@ -4,6 +4,7 @@
 // https://medium.com/@chetcorcos/elmish-functional-programming-in-javascript-50995f1d4b9e#.dfw4k28ob
 // https://github.com/evancz/elm-architecture-tutorial
 // https://github.com/paldepind/functional-frontend-architecture
+// https://medium.com/@yelouafi/react-less-virtual-dom-with-snabbdom-functions-everywhere-53b672cb2fe3#.cnc1ktfqs
 
 var diff = require('virtual-dom/diff');
 var patch = require('virtual-dom/patch');
