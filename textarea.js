@@ -18,9 +18,11 @@ var init = function() {
 var view = function(dispatch, model) {
     return h('div', {},
         [ h('textarea',
-            { oninput: compose(targetValue, function(s) { dispatch(Action.Input(s))(); }) },
-            [ model ]
-          ),
+            { oninput: compose(targetValue, function(s) { dispatch(Action.Input(s))(); }),
+              value: model
+            },
+            [ ]
+           ),
         ]
     );
 };
