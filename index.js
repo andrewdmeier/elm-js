@@ -5,4 +5,4 @@ var textarea = require('./textarea.js');
 var undoable = require('./undoable.js');
 var start = require('./startApp.js').start;
 
-start(undoable(textarea));
+start(listOf(undoable(textarea)));
