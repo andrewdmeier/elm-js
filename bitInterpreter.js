@@ -84,11 +84,7 @@ var bits2Elements = function(bits, grid) {
 var view = function(dispatch, model) {
     return h('div', {},
         [ textarea.view(forward(dispatch, Action.Textarea), model.textarea),
-          canvas.view({
-              height: model.grid.length,
-              width: model.grid.length,
-              elements: bits2Elements(model.textarea, model.grid),
-          }),
+          canvas(model.grid.length, bits2Elements(model.textarea, model.grid)),
         ]
     );
 };

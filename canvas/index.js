@@ -3,15 +3,13 @@ var h = require('virtual-dom/h');
 var DrawHook = require('./DrawHook');
 
 // View
-var view = function(model) {
+var canvas = function(length, elements) {
     return h('canvas',
-        { height: model.height,
-          width: model.width,
-          'draw-hook': DrawHook(model.elements),
+        { height: length,
+          width: length,
+          'draw-hook': DrawHook(elements),
         }, []
     );
 };
 
-module.exports = {
-    view: view,
-};
+module.exports = canvas;
