@@ -57,10 +57,13 @@ var getCell = _.curry(function(length, row, col, fill, index) {
 });
 
 var bits2Elements = function(bits, grid) {
+    // NOTE: this first element is the default background color.
     return [ { x: 0, y: 0, width: grid.length, height: grid.length, fill: '#CCCCCC' } ]
         .concat(
             bits
+                // TODO: replace based on number base
                 .replace(/[^10]/g, '')
+                // TODO: chunk based on numBits in encoding
                 .split('')
                 // TODO: use filteredMap instead of replace for performance
                 // filterMap : (a -> Maybe b) -> List a -> List b
@@ -71,6 +74,7 @@ var bits2Elements = function(bits, grid) {
                         getCell(grid.length, grid.rows, grid.cols),
                         addCellMargin(grid.length, grid.rows, grid.cols),
                         adjustCellDrawPosition(grid.length, grid.rows, grid.cols)
+                    // NOTE: this ternary is where interpret bits belongs.
                     )((bit === '0' ? '#000000' : '#FFFFFF'), index);
                 })
         );
