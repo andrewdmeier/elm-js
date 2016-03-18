@@ -3,12 +3,10 @@ var h = require('virtual-dom/h');
 var DrawHook = require('./DrawHook');
 
 // View
-var canvas = function(length, elements) {
+var canvas = function(attributes, elements) {
     return h('canvas',
-        { height: length,
-          width: length,
-          'draw-hook': DrawHook(elements),
-        }, []
+        Object.assign({}, attributes, { 'draw-hook': DrawHook(elements) }),
+        []
     );
 };
 

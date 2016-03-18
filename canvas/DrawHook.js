@@ -24,6 +24,4 @@ DrawHook.prototype.hook = function(node) {
     });
 };
 
-// TODO: unhook? necessary?
-
 module.exports = DrawHook;
