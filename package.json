@@ -16,6 +16,8 @@
   "author": "john-kelly",
   "license": "ISC",
   "dependencies": {
+    "flyd": "^0.2.1",
+    "flyd-forwardto": "0.0.2",
     "lodash": "^4.6.1",
     "union-type": "^0.3.0",
     "virtual-dom": "^2.1.1"

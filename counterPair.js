@@ -1,10 +1,8 @@
+var counter = require('./counter.js');
+var forwardTo = require('flyd-forwardto');
+var h = require('virtual-dom/h');
 var Type = require('union-type');
 
-var forward = require('lodash/flowRight');
-
-var h = require('virtual-dom/h');
-
-var counter = require('./counter.js');
 
 // Actions
 var Action = Type({
@@ -21,10 +19,10 @@ var init = function() {
 };
 
 // View
-var view = function(dispatch, model) {
+var view = function(actions$, model) {
     return h('div', {},
-      [ counter.view(forward(dispatch, Action.Top), model.top),
-        counter.view(forward(dispatch, Action.Bottom), model.bottom),
+      [ counter.view(forwardTo(actions$, Action.Top), model.top),
+        counter.view(forwardTo(actions$, Action.Bottom), model.bottom),
       ]
     );
 };

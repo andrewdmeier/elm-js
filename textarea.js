@@ -15,10 +15,10 @@ var init = function() {
 };
 
 // View
-var view = function(dispatch, model) {
+var view = function(actions$, model) {
     return h('div', {},
         [ h('textarea',
-            { oninput: compose(targetValue, function(s) { dispatch(Action.Input(s))(); }),
+            { oninput: compose(targetValue, function(s) { actions$(Action.Input(s))(); }),
               value: model
             },
             [ ]
