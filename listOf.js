@@ -1,8 +1,6 @@
-var Type = require('union-type');
-
+var forwardTo = require('flyd-forwardto');
 var h = require('virtual-dom/h');
-
-var forward = require('lodash/flowRight');
+var Type = require('union-type');
 
 module.exports = function(component) {
     // Actions
@@ -20,17 +18,17 @@ module.exports = function(component) {
     };
 
     // View
-    var view = function(dispatch, model) {
+    var view = function(actions$, model) {
         return h('div', {},
                 model.list.map(function(item, index) {
                     return h('div', {},
                         [ component.view(
-                            forward(dispatch, Action.Edit(model.list[index].id)),
+                            forwardTo(actions$, Action.Edit(model.list[index].id)),
                             model.list[index].model)
                         ]
                     );
                 }).concat([
-                    h('button', { onclick: dispatch(Action.Add()) }, [ '+' ])
+                    h('button', { onclick: function() { actions$(Action.Add()) } }, [ '+' ])
                 ])
             );
     };

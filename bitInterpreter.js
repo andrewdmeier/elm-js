@@ -1,6 +1,6 @@
 var Type = require('union-type');
 var h = require('virtual-dom/h');
-var forward = require('lodash/flowRight');
+var forwardTo = require('flyd-forwardto');
 var compose = require('lodash/flow');
 var _ = require('lodash');
 
@@ -95,26 +95,26 @@ var bits2Elements = function(bits, grid) {
 };
 
 // View
-var view = function(dispatch, model) {
+var view = function(actions$, model) {
     return h('div', {},
-        [ textarea.view(forward(dispatch, Action.Textarea), model.textarea),
+        [ textarea.view(forwardTo(actions$, Action.Textarea), model.textarea),
           canvas(
               { height: model.grid.length, width: model.grid.length },
               bits2Elements(model.textarea, model.grid)
           ),
           h('br', {}, []),
           h('input', {
-              oninput: compose(targetValue, function(s) { dispatch(Action.Rows(s))(); }),
+              oninput: compose(targetValue, function(s) { actions$(Action.Rows(s))(); }),
               type: 'number',
               value: model.grid.rows
           }, []),
           h('input', {
-              oninput: compose(targetValue, function(s) { dispatch(Action.Cols(s))(); }),
+              oninput: compose(targetValue, function(s) { actions$(Action.Cols(s))(); }),
               type: 'number',
               value: model.grid.cols
           }, []),
           h('input', {
-              oninput: compose(targetValue, function(s) { dispatch(Action.Length(s))(); }),
+              oninput: compose(targetValue, function(s) { actions$(Action.Length(s))(); }),
               type: 'number',
               value: model.grid.length
           }, []),

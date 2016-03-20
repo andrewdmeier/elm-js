@@ -2,7 +2,7 @@ var Type = require('union-type');
 
 var h = require('virtual-dom/h');
 
-var forward = require('lodash/flowRight');
+var forwardTo = require('flyd-forwardto');
 
 module.exports = function(component) {
     // Actions
@@ -21,16 +21,16 @@ module.exports = function(component) {
     };
 
     // View
-    var view = function(dispatch, model) {
+    var view = function(actions$, model) {
         return h('div', {},
-                [ h('div', {},
-                    [ component.view(forward(dispatch, Action.Edit), model.history[model.index]),
-                      h('button', { onclick: dispatch(Action.Undo()) }, [ 'Undo' ]),
-                      h('button', { onclick: dispatch(Action.Redo()) }, [ 'Redo' ])
-                    ]
-                   )
+            [ h('div', {},
+                [ component.view(forwardTo(actions$, Action.Edit), model.history[model.index]),
+                  h('button', { onclick: function() { actions$(Action.Undo()) } }, [ 'Undo' ]),
+                  h('button', { onclick: function() { actions$(Action.Redo()) } }, [ 'Redo' ])
                 ]
-            );
+               )
+            ]
+        );
     };
 
     // Update

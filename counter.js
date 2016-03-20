@@ -1,5 +1,5 @@
-var Type = require('union-type');
 var h = require('virtual-dom/h');
+var Type = require('union-type');
 
 // Actions
 var Action = Type({ Increment: [], Decrement: [] });
@@ -10,11 +10,11 @@ var init = function() {
 };
 
 // View
-var view = function(dispatch, model) {
+var view = function(actions$, model) {
     return h('div', {},
-        [ h('button', { onclick: dispatch(Action.Increment()) }, [ '+' ]),
+        [ h('button', { onclick: function() { actions$(Action.Increment()) } }, [ '+' ]),
           h('span', {}, [ model ]),
-          h('button', { onclick: dispatch(Action.Decrement()) }, [ '-' ]),
+          h('button', { onclick: function() { actions$(Action.Decrement()) } }, [ '-' ]),
         ]
     );
 };
