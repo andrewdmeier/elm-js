@@ -19,13 +19,21 @@ var start = function(mvu) {
 
     var vDom$ = flyd.map(mvu.view.bind(null, actions$), state$);
 
-    var patches$ = flyd.scan(function(prev, newVDom) {
-        return { patches: diff(prev.prevVDom, newVDom), prevVDom: newVDom };
-    }, { patches: diff(vDom$(), vDom$()), prevVDom: vDom$() }, vDom$);
+    var patches$ = flyd.scan(
+        function(patchesAndPrevVDom, newVDom) {
+            return {
+                patches: diff(patchesAndPrevVDom.prevVDom, newVDom),
+                prevVDom: newVDom
+            };
+        },
+        {
+            patches: diff(vDom$(), vDom$()),
+            prevVDom: vDom$()
+        },
+        vDom$
+    ).map(function(patchesAndPrevVDom) { return patchesAndPrevVDom.patches });
 
-    var $dom = flyd.scan(function(root, patches) {
-        return patch(root, patches.patches);
-    }, createElement(vDom$()), patches$);
+    var $dom = flyd.scan(patch, createElement(vDom$()), patches$);
 
     document.body.appendChild($dom());
 };
