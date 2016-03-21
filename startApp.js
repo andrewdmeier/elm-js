@@ -15,27 +15,19 @@ var rearg = require('lodash/rearg');
 var start = function(mvu) {
     var actions$ = flyd.stream();
 
-    // needed to rearg b/c `update` is of the form:
-    // action -> state -> state
-    // but scan takes an accumulator function of the form:
-    // state -> action -> state
     var state$ = flyd.scan(rearg(mvu.update, 1, 0), mvu.init(), actions$);
 
-    var vnode$ = flyd.map(mvu.view.bind(null, actions$), state$);
+    var vDom$ = flyd.map(mvu.view.bind(null, actions$), state$);
 
-    // diff saves the prevTree as `.a`
-    var patches$ = flyd.scan(
-        function(patches, currentTree) { return diff(patches.a, currentTree) },
-        diff(vnode$(), vnode$()),
-        vnode$
-    );
+    var patches$ = flyd.scan(function(prev, newVDom) {
+        return { patches: diff(prev.prevVDom, newVDom), prevVDom: newVDom };
+    }, { patches: diff(vDom$(), vDom$()), prevVDom: vDom$() }, vDom$);
 
-    // patch mutates the dom -- this scan has side effects.
-    var dom$ = flyd.scan(patch, createElement(vnode$()), patches$);
+    var $dom = flyd.scan(function(root, patches) {
+        return patch(root, patches.patches);
+    }, createElement(vDom$()), patches$);
 
-    // append the initial dom$
-    document.body.appendChild(dom$());
-
+    document.body.appendChild($dom());
 };
 
 module.exports = {
