@@ -6,4 +6,4 @@ var start = require('./startApp.js').start;
 var textarea = require('./textarea.js');
 var undoable = require('./undoable.js');
 
-start(undoable(bitInterpreter));
+start(undoable(listOf(counter)));
