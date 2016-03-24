@@ -9,8 +9,11 @@
 var createElement = require('virtual-dom/create-element');
 var diff = require('virtual-dom/diff');
 var flyd = require('flyd');
+var lift = require('flyd-lift');
 var patch = require('virtual-dom/patch');
 var rearg = require('lodash/rearg');
+
+var oneOff = require('./helpers.js').oneOff;
 
 var start = function(mvu) {
     var actions$ = flyd.stream();
@@ -19,23 +22,11 @@ var start = function(mvu) {
 
     var vDom$ = flyd.map(mvu.view.bind(null, actions$), state$);
 
-    var patches$ = flyd.scan(
-        function(patchesAndPrevVDom, newVDom) {
-            return {
-                patches: diff(patchesAndPrevVDom.prevVDom, newVDom),
-                prevVDom: newVDom
-            };
-        },
-        {
-            patches: diff(vDom$(), vDom$()),
-            prevVDom: vDom$()
-        },
-        vDom$
-    ).map(function(patchesAndPrevVDom) { return patchesAndPrevVDom.patches });
+    var patches$ = lift(diff, oneOff(vDom$), vDom$);
 
-    var $dom = flyd.scan(patch, createElement(vDom$()), patches$);
+    var dom$ = flyd.scan(patch, createElement(vDom$()), patches$);
 
-    document.body.appendChild($dom());
+    document.body.appendChild(dom$());
 };
 
 module.exports = {
